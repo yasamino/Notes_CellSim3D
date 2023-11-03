@@ -6,4 +6,6 @@
 
 > $ mpirun -np <# of processes>  ./CellDiv 20 inp.json <# sections in x> <#setions in y> <# sections in z>
 
+The last three terms divides the box in three directions 
+
 Multiplication of the last three temrs should be equal to the number of processors
