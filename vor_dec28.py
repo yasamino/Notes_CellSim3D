@@ -130,7 +130,7 @@ stopAt = args.num_frames
 
 #filename="inp.xyz"
 #Files=["inp2.xyz" , "inp5.xyz" , "inp10.xyz"]
-Files=["inp.xyz"]
+Files=["CM.xyz"]
 cell_com=[]
 
 
@@ -142,25 +142,29 @@ def animation_func(xs,ys):
 	plt.hist2d(xs,ys,bins=20)
 	
 def Plot_NN_disrtibution(vor):
-    max=12
+    max=14
     N=np.zeros(max)
     a=np.arange(1,max+1)
+    #vor.regions : list of indices of vertices for each voronoi cell
+    # we can find how many neighbors each cell has by looking at the length of each list
     for j in vor.regions:
         N[len(j)-1]+=1
-    Dros=[0,0,0,0.03,0.28,0.46,0.2,0.03,0,0,0,0]
-    xenopus=[0,0,0.01,0.04,0.285,0.43,0.18,0.05,0.02,0,0,0]
-    plt.bar(a- 0.2,Dros,0.2, edgecolor='black',label="Drosophila(2171)")
-    plt.bar(a ,xenopus,0.2, edgecolor='black',label="Xenopus(1051)")
-    plt.bar(a + 0.2,N/sum(N),0.2, edgecolor='black',label="simulation(1783)")
+    #Dros=[0,0,0,0.03,0.28,0.46,0.2,0.03,0,0,0,0]
+    #xenopus=[0,0,0.01,0.04,0.285,0.43,0.18,0.05,0.02,0,0,0]
+    #plt.bar(a- 0.2,Dros,0.2, edgecolor='black',label="Drosophila(2171)")
+    #plt.bar(a ,xenopus,0.2, edgecolor='black',label="Xenopus(1051)")
+    #plt.bar(a + 0.2,N/sum(N),0.2, edgecolor='black',label="simulation(1783)")
+    plt.bar(a,N/sum(N),0.2, edgecolor='black',label="simulation")
 
     
     plt.title("Number of Nearest Neighbors")
     plt.xlabel("$N_n$")
     plt.ylabel("fraction")
-    plt.legend()
-    cmap = plt.get_cmap('hot')
-    plt.set_cmap(cmap)
-    plt.show()
+    #plt.legend()
+    #cmap = plt.get_cmap('hot')
+    #plt.set_cmap(cmap)
+    plt.savefig("NN_plot{}.png".format(i))
+    #plt.show()
 
 def Plot_cell_distribution(cell_com):
     xs=[ i[0] for i in cell_com ]
@@ -191,12 +195,14 @@ def Calculte_area_distribution(vor):
             S_seg=0
     return s
 
-def Plot_area_distribution(vor):
+def Plot_area_distribution(vor,param):
     s=Calculte_area_distribution(vor)
     plt.hist(s,bins=200,label="Simulation")
-    plt.legend()
+    #plt.legend()
     plt.xlabel("Area")
     plt.ylabel("Count")
+    plt.title("Area distribution for stiffnes {}".format(param))
+    plt.savefig("Area_distribution{}.png".format(i))
     #plt.title("Area distribution for a simulated epithelium")
     #svg
     #print(s)        
@@ -243,8 +249,8 @@ def Color_area_distribution(vor):
                 p.set_color(cpick.to_rgba(S_seg))
                 ax.add_collection(p)
     #ax.autoscale()
-    ax.set_xlim([-5,105])
-    ax.set_ylim([-5,105])
+    ax.set_xlim([-5,45])
+    ax.set_ylim([-5,45])
     
     # F = plt.figure()
     # A = F.add_subplot(111)
@@ -343,14 +349,15 @@ for filename in Files:
                 if i == 0:
                     initial_cell = coords[0]
                 
-                if i > 48:
+                if i > 30:
                     vor = Voronoi(coords)
-                    print(len(vor.points))
+                    #print(len(vor.points))
                     #Color_area_distribution(vor)
-                    Find_radial_distribution(vor,initial_cell)
-
+                    #Find_radial_distribution(vor,initial_cell)
+                
+                    #Plot_NN_disrtibution(vor)
                    
-                    #Plot_area_distribution(vor)
+                    Plot_area_distribution(vor,0.6)
                 #NN dist
                 
                 #Plot_NN_disrtibution(vor)
